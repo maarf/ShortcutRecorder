@@ -77,32 +77,8 @@ FOUNDATION_STATIC_INLINE UInt32 SRCocoaToCarbonFlags(NSEventModifierFlags aCocoa
 
     @discussion Throws NSInternalInconsistencyException if bundle cannot be found.
 */
-FOUNDATION_STATIC_INLINE NSBundle *SRBundle()
-{
-    static dispatch_once_t onceToken;
-    static NSBundle *Bundle = nil;
-    dispatch_once(&onceToken, ^{
-        Bundle = [NSBundle bundleWithIdentifier:@"com.kulakov.ShortcutRecorder"];
+NSBundle *SRBundle();
 
-        if (!Bundle)
-        {
-            // Could be a CocoaPods bundle
-            Bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:@"ShortcutRecorder"
-                                                                              ofType:@"bundle"]];
-        }
-    });
-
-    if (!Bundle)
-    {
-        @throw [NSException exceptionWithName:NSInternalInconsistencyException
-                                       reason:@"Unable to find bundle with resources."
-                                     userInfo:nil];
-    }
-    else
-    {
-        return Bundle;
-    }
-}
 
 /*!
     Convenient method to get localized string from the framework bundle.
@@ -141,7 +117,7 @@ NSString *SRReadableASCIIStringForCocoaModifierFlagsAndKeyCode(NSEventModifierFl
     Determines if given key code with flags is equal to key equivalent and flags
     (usually taken from NSButton or NSMenu).
 
-    @discussion On Mac OS X some key combinations can have "alternates". E.g. option-A can be represented both as option-A and as Œ.
+    @discussion On Mac OS X some key combinations can have "alternates". E.g. option-A can be represented both as option-A and as å.
 */
 BOOL SRKeyCodeWithFlagsEqualToKeyEquivalentWithFlags(unsigned short aKeyCode,
                                                      NSEventModifierFlags aKeyCodeFlags,
